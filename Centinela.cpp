@@ -81,7 +81,7 @@ public:
     }
 };
 
-int main() {
+/* int main() {
     Centinela sentinelShip;
     sentinelShip.fill();
 
@@ -96,3 +96,4 @@ int main() {
 
     return 0;
 }
+ */
