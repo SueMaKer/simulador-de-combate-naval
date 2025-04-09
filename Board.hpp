@@ -262,7 +262,7 @@ class Board {
             return true;
         }
 
-        bool attack(Board& enemyBoard) {
+        bool attack(Board& enemyBoard, const int damage) {
             int row, col;
         
             displayHitBoard();  // Muestra el tablero de ataques
@@ -292,7 +292,7 @@ class Board {
                 hitBoard[row][col] = attackedShip;  // Marcar como hit en el tablero de ataques
                 
                 // Realizar daño al barco atacado
-                attackedShip->takeDamage(10);  // Supón que el ataque hace 10 de daño. Puedes ajustar este valor.
+                attackedShip->takeDamage(damage);  // Supón que el ataque hace 10 de daño. Puedes ajustar este valor.
                 
                 std::cout << "Hit! The ship's health is now " << attackedShip->getHealth() << std::endl;
                 

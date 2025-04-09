@@ -9,12 +9,6 @@ public:
     Destroyer(string name)
         : Ship(name, 5, 300, 600, 120, 'D') {}
 
-    void attack(Ship* target) override {
-        cout << name << " is attacking " << target->getName() << "!" << endl;
-        target->takeDamage(power);
-
-    }
-
     void display() const override {
         cout << "Destroyer: " << name << " | HP: " << health << endl;
     }

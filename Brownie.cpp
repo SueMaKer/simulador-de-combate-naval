@@ -98,7 +98,7 @@ public: //Initializes the list and immediately fills it with random values.
     }
 };
 
-int main() {
+/* int main() {
     Brownie brownie;
 
     int targetValue = 123; // You can change this to test different values
@@ -106,4 +106,4 @@ int main() {
     brownie.printReport();
 
     return 0;
-}
+} */

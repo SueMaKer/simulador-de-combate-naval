@@ -20,13 +20,21 @@ public:
     }
 
     void displayFleet() const {
-        for (auto s : ships)
-            s->display();
+        for (int i = 0; i < size; ++i) {
+            std::cout << i+1 << ": ";
+            ships[i]->display();
+        }
     }
     int getSize() const {
         return size;
     }
+    const int getShipPower(int index){
+        return ships[index]->getPower();
+    }
 
+    void upgradeShip(int index){
+        ships[index]->upgradeShip();
+    } 
     vector<Ship *> getShips(){
         return ships;
     }

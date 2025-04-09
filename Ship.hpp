@@ -18,12 +18,6 @@ class Ship {
     
         virtual ~Ship() = default;
     
-        virtual void attack(Ship* target) {
-            // Implementación predeterminada
-            cout << name << " attacks " << target->getName() << " with " << power << " power!" << endl;
-            target->takeDamage(power);  // Aplica daño al objetivo
-        }
-    
         virtual void display() const {
             // Mostrar información del barco
             cout << "Ship: " << name << ", Health: " << health << ", Power: " << power << endl;
@@ -33,11 +27,16 @@ class Ship {
             health -= dmg;
             if (health < 0) health = 0;
         }
+
+        virtual void upgradeShip(){
+            cout << "not implemented!" << endl;
+        }
     
         string getName() const { return name; }
         int getHealth() const { return health; }
         bool isDestroyed() const { return health <= 0; }
         int getSize() const { return size; }
         int getPrice() const { return price; }
-        char getID() const { return id; }  // Obtener la ID del barco
+        char getID() const { return id; }  
+        int getPower() const {return power;}
     };

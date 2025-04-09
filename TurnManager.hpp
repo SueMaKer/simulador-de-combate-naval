@@ -84,11 +84,16 @@ public:
     }
 
     void upgradeShip(Player& player) {
-        std::cout << "Upgrading Ship...\n";
+        player.getBoard().getFleet().displayFleet();
+        int ship = dm.askInt("Select your ship to upgrade: ", 1, player.getFleet(1).getSize());
+        player.getFleet(1).upgradeShip(--ship);
     }
 
     void attack(Player& attacker, Player& defender) {
-        attacker.getBoard().attack(defender.getBoard()); 
+        attacker.getBoard().getFleet().displayFleet();
+        int ship = dm.askInt("Select your Ship: ", 1, attacker.getFleet(1).getSize());
+
+        attacker.getBoard().attack(defender.getBoard(), attacker.getFleet(1).getShipPower(--ship)); 
     }
 
     void surrender(Player& player) {
