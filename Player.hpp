@@ -11,7 +11,7 @@ private:
     Board board;
 
 public:
-    Player(const std::string& name) : name(name), money(2000), health(100), actionPoints(3) {}
+    Player(const std::string& name) : name(name), money(1000), health(100), actionPoints(3) {}
 
     std::string getName() const { return name; }
     int getMoney() const { return money; }
@@ -31,6 +31,10 @@ public:
         if (!canAfford(amount)) return false;
         money -= amount;
         return true;
+    }
+
+    void addMoney(int currency) {
+        money += currency;
     }
 
     void setHealth(int newHealth) { health = newHealth; }

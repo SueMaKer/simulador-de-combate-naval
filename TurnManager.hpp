@@ -2,6 +2,9 @@
 #include "Player.hpp"
 #include "DataManager.hpp"
 #include <iostream>
+#include <cstdlib>
+
+#define CURRENCY  200
 
 class TurnManager {
 private:
@@ -13,34 +16,23 @@ public:
     TurnManager(Player& p1, Player& p2, DataManager& dm) 
         : player1(p1), player2(p2), dm(dm) {}
 
-    void mostrarOpciones() const {
-        std::cout << "=============Actions==============\n";
-        std::cout << "1. Buy Ship\n";
-        std::cout << "2. Upgrade Ship\n";
-        std::cout << "3. Move Ship\n";
-        std::cout << "4. Attack!\n";
-        std::cout << "5. Surrender\n";
-        std::cout << "==================================\n";
-    }
-
     void playTurn(int currentPlayerIndex) {
         Player& currentPlayer = currentPlayerIndex == 0 ? player1 : player2;
         Player& enemyPlayer   = currentPlayerIndex == 0 ? player2 : player1;
 
         int actionsLeft = 3;
         bool turnOver = false;
-
+        currentPlayer.addMoney(CURRENCY);
+        std::cout << "You received " << CURRENCY << "\n";
         while (actionsLeft > 0 && !turnOver) {
             dm.showPlayerInfo(currentPlayer);
             std::cout << "You have " << actionsLeft << " actions left.\n";
-            mostrarOpciones();
 
-            int option;
-            std::cin >> option;
+            int option = dm.showOptions();
 
             switch(option) {
                 case 1:
-                    comprarBarco(currentPlayer);
+                    buyShip(currentPlayer);
                     actionsLeft--;
                     break;
                 case 2:
@@ -56,6 +48,12 @@ public:
                     actionsLeft--;
                     break;
                 case 5:
+                    showBoard(currentPlayer);
+                    break;
+                case 6:
+                    showHitBoard(currentPlayer);
+                    break;
+                case 7:
                     surrender(currentPlayer);
                     turnOver = true;
                     break;
@@ -68,10 +66,25 @@ public:
                 std::cout << "End of turn.\n";
                 turnOver = true;
             }
+            int wait = dm.askInt("Press 1 to continue: ", 1, 1);
+            clearScreen();
         }
+
     }
 
-    void comprarBarco(Player& player) {
+    void showBoard(Player& player){
+        clearScreen();
+        dm.showMessage("=====Board=====");
+        player.getBoard().display();
+    }
+
+    void showHitBoard(Player& player){
+        clearScreen();
+        dm.showMessage("=====Hitboard=====");
+        player.getBoard().displayHitBoard();
+    }
+    
+    void buyShip(Player& player) {
         Ship* ship = dm.askShipToCreate();
         if (!ship) return;
 
@@ -99,5 +112,9 @@ public:
     void surrender(Player& player) {
         std::cout << player.getName() << " surrendered.\n";
         exit(0);
+    }
+
+    void clearScreen() {
+        std::system("clear");
     }
 };

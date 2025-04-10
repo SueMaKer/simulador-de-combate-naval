@@ -38,13 +38,15 @@ public:
 
     int showOptions() {
         std::cout << "=============Actions==============\n";
-        std::cout << "1. Buy Battleship\n";
-        std::cout << "2. Upgrade Battleship\n";
-        std::cout << "3. Move Battleship\n";
+        std::cout << "1. Buy Ship\n";
+        std::cout << "2. Upgrade Ship\n";
+        std::cout << "3. Move Ship\n";
         std::cout << "4. Attack!\n";
-        std::cout << "5. Surrender\n";
+        std::cout << "5. Show my board\n";
+        std::cout << "6. Show my hitboard\n";
+        std::cout << "7. Surrender\n";
         std::cout << "==================================\n";
-        return askInt("What would you like to do? :", 1, 5);
+        return askInt("What would you like to do? :", 1, 7);
     }
 
     // Solicitar string

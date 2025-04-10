@@ -34,6 +34,7 @@ public:
 
         // Inicializamos el TurnManager pasándole los dos jugadores y DataManager
         turnManager = new TurnManager(players[0], players[1], dm);
+        turnManager->clearScreen();
     }
 
     ~Game() {
