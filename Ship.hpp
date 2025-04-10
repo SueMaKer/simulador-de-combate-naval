@@ -15,6 +15,8 @@ class Ship {
     public:
         Ship(string name, int size, int price, int health, int power, char id)
             : name(name), size(size), price(price), health(health), power(power), id(id) {}
+        
+        Ship(){}
     
         virtual ~Ship() = default;
     
@@ -38,5 +40,5 @@ class Ship {
         int getSize() const { return size; }
         int getPrice() const { return price; }
         char getID() const { return id; }  
-        int getPower() const {return power;}
+        virtual int getPower() {return power;}
     };

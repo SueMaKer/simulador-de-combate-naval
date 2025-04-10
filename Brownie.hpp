@@ -1,6 +1,8 @@
-/* #include <iostream>
+#pragma once 
+#include <iostream>
 #include <chrono>
 #include <random>
+#include "Ship.hpp"
 
  int NUM_OF_ELEMENTS = 1000; // Number of elements in the list
  int DAMAGE_CONSTANT = 800;
@@ -13,7 +15,7 @@ public:
     Node(int val) : value(val), next(nullptr) {}
 };
 
-class Brownie {    //Creating the list, searching through it, measuring time and iteration count and calculating damage.
+class Brownie : public Ship{    //Creating the list, searching through it, measuring time and iteration count and calculating damage.
 private: 
     Node* head;
     int currentSize;
@@ -22,10 +24,11 @@ private:
     bool foundLastValue;
 
 public: //Initializes the list and immediately fills it with random values.
-    Brownie() : head(nullptr), currentSize(0), lastSearchTime(0), lastIterations(0), foundLastValue(false) {
+    Brownie() : head(nullptr), currentSize(0), lastSearchTime(0), lastIterations(0), foundLastValue(false) , Ship("Brownie", 4, 150, 100, 650, 'B'){
         populateList();
     }
 
+    
     ~Brownie() {
         clear();
     }
@@ -85,7 +88,7 @@ public: //Initializes the list and immediately fills it with random values.
         lastSearchTime = std::chrono::duration<double, std::milli>(end - start).count();
     }
 
-    int getPower(){        //Less iterations = higher damage.
+    int getPower() override{        //Less iterations = higher damage.
         search(23);
         return lastIterations > 0 ? DAMAGE_CONSTANT / lastIterations : 0.0;
     }
@@ -98,13 +101,3 @@ public: //Initializes the list and immediately fills it with random values.
         std::cout << "Last iterations: " << lastIterations << "\n";
     }
 };
- */
-/* int main() {
-    Brownie brownie;
-
-    int targetValue = 123; // You can change this to test different values
-    brownie.search(targetValue);
-    brownie.printReport();
-
-    return 0;
-} */

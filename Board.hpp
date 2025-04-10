@@ -6,351 +6,72 @@
 
 using namespace std;
 
-const int BOARD_SIZE = 10;  // 10x10 board
+const int BOARD_SIZE = 10;  // Board size (10x10)
 
+/*
+ * Board class represents the game board for placing and managing ships.
+ * It handles ship placement, movement, and board display for both player view and hit tracking.
+ */
 class Board {
     private:
-        Ship* board[BOARD_SIZE][BOARD_SIZE];  // Tablero de punteros a objetos Ship
-        Ship* hitBoard[BOARD_SIZE][BOARD_SIZE];  // Tablero de hits
-        vector<Ship*> ships;  // Vector de barcos en el tablero
-        Fleet fleet;
+        Ship* board[BOARD_SIZE][BOARD_SIZE];      // Main board with ship positions
+        Ship* hitBoard[BOARD_SIZE][BOARD_SIZE];   // Board to track hits
+        vector<Ship*> ships;                      // Ships placed on the board
+        Fleet fleet;                              // Fleet object to manage player's ships
+
     public:
+        /*
+         * Constructor: Initializes the board and hit board with nullptr.
+         */
         Board() {
-            // Inicializar el tablero y el tablero de hits con nullptr
             for (int i = 0; i < BOARD_SIZE; i++) {
                 for (int j = 0; j < BOARD_SIZE; j++) {
-                    board[i][j] = nullptr;  // Inicializamos cada casilla con nullptr en el tablero de barcos
-                    hitBoard[i][j] = nullptr;  // Inicializamos cada casilla con nullptr en el tablero de hits
+                    board[i][j] = nullptr;
+                    hitBoard[i][j] = nullptr;
                 }
             }
         }
 
-        void display() const {
-            // Mostrar el tablero con las coordenadas de las filas y columnas
-            cout << "  ";
-            for (int i = 0; i < BOARD_SIZE; i++) {
-                cout << i << " ";  // Imprimir las coordenadas de las columnas
-            }
-            cout << endl;
+        /*
+         * Displays the current board with ship positions.
+         * '~' represents empty cells.
+         */
+        void display() const;
 
-            for (int i = 0; i < BOARD_SIZE; i++) {
-                cout << i << " ";  // Imprimir las coordenadas de las filas
-                for (int j = 0; j < BOARD_SIZE; j++) {
-                    if (board[i][j] == nullptr) {
-                        cout << "~ ";  // Casilla vacía
-                    } else {
-                        cout << board[i][j]->getID() << " ";  // Mostrar la ID del barco
-                    }
-                }
-                cout << endl;
-            }
-        }
+        /*
+         * Displays the hit board showing successful hits.
+         * '~' represents cells without hits.
+         */
+        void displayHitBoard() const;
 
-        void displayHitBoard() const {
-            // Mostrar el tablero de hits con las coordenadas de las filas y columnas
-            cout << "  ";
-            for (int i = 0; i < BOARD_SIZE; i++) {
-                cout << i << " ";  // Imprimir las coordenadas de las columnas
-            }
-            cout << endl;
+        /*
+         * Places a ship on the board.
+         * Prompts the user to input starting coordinates and orientation.
+         * Validates placement rules (bounds, overlapping).
+         *
+         * @param ship Pointer to the ship to place.
+         * @return true if the ship was placed successfully.
+         */
+        bool placeShip(Ship* ship);
 
-            for (int i = 0; i < BOARD_SIZE; i++) {
-                cout << i << " ";  // Imprimir las coordenadas de las filas
-                for (int j = 0; j < BOARD_SIZE; j++) {
-                    if (hitBoard[i][j] == nullptr) {
-                        cout << "~ ";  // Casilla sin hit
-                    } else {
-                        cout << hitBoard[i][j]->getID() << " ";  // Mostrar la ID del barco al que le dio
-                    }
-                }
-                cout << endl;
-            }
-        }
+        /*
+         * Allows the player to move a ship already placed on the board.
+         * Prompts the user to select a ship by ID and input new position and orientation.
+         * Validates new position.
+         *
+         * @return true if the ship was moved successfully.
+         */
+        bool moveShip();
 
-        bool placeShip(Ship* ship) {
-            int row, col;
-            char orientation;
+        bool attack(Board& enemyBoard, const int damage);
 
-            // Mostrar el tablero actual
-            cout << "Current Board:" << endl;
-            display();
+        bool receiveShot(int row, int col);
 
-            bool placed = false;
-            while (!placed) {
-                // Solicitar la posición inicial y la orientación del barco
-                cout << "Enter the starting row for " << ship->getName() << " (size " << ship->getSize() << "): ";
-                cin >> row;
-                cout << "Enter the starting column for " << ship->getName() << " (size " << ship->getSize() << "): ";
-                cin >> col;
-                cout << "Enter orientation (h for horizontal, v for vertical): ";
-                cin >> orientation;
+        bool allShipsSunk() const;
 
-                // Validar las coordenadas
-                if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
-                    cout << "Invalid coordinates. Please enter values within the range of the board (0 to " << BOARD_SIZE - 1 << ")." << endl;
-                    continue;
-                }
+        Ship* getShipAt(int row, int col) const;
 
-                // Verificar que la orientación sea válida
-                if (orientation != 'h' && orientation != 'v') {
-                    cout << "Invalid orientation. Use 'h' for horizontal and 'v' for vertical." << endl;
-                    continue;
-                }
+        const Fleet& getConstFleet() const;
 
-                bool horizontal = (orientation == 'h');
-
-                // Validar si el barco cabe en la posición indicada
-                if (horizontal) {
-                    if (col + ship->getSize() > BOARD_SIZE) {
-                        cout << "The ship does not fit horizontally on the board." << endl;
-                        continue;
-                    }
-                    for (int i = 0; i < ship->getSize(); i++) {
-                        if (board[row][col + i] != nullptr) {
-                            cout << "There is already a ship at position (" << row << ", " << col + i << ")." << endl;
-                            continue;
-                        }
-                    }
-
-                    // Colocar el barco
-                    for (int i = 0; i < ship->getSize(); i++) {
-                        board[row][col + i] = ship;  // Colocar el puntero al barco en el tablero
-                    }
-                    placed = true;
-                } else {
-                    if (row + ship->getSize() > BOARD_SIZE) {
-                        cout << "The ship does not fit vertically on the board." << endl;
-                        continue;
-                    }
-                    for (int i = 0; i < ship->getSize(); i++) {
-                        if (board[row + i][col] != nullptr) {
-                            cout << "There is already a ship at position (" << row + i << ", " << col << ")." << endl;
-                            continue;
-                        }
-                    }
-
-                    // Colocar el barco
-                    for (int i = 0; i < ship->getSize(); i++) {
-                        board[row + i][col] = ship;  // Colocar el puntero al barco en el tablero
-                    }
-                    placed = true;
-                }
-
-                // Mostrar el tablero después de colocar el barco
-                cout << "Current Board:" << endl;
-                display();
-            }
-
-            return true;
-        }
-
-        bool moveShip() {
-            int row, col;
-            char orientation;
-
-            // Mostrar el tablero actual
-            cout << "Current Board:" << endl;
-            display();  // Mostrar el tablero con las posiciones actuales de los barcos
-
-            // Mostrar los barcos y sus IDs para que el jugador elija cuál mover
-            cout << "Your Fleet:" << endl;
-            fleet.displayFleet();  // Mostrar los barcos de la flota con sus IDs
-
-            char shipID;
-            cout << "Enter the ID of the ship you want to move: ";
-            cin >> shipID;
-
-            // Buscar el barco por ID en la flota
-            Ship* selectedShip = nullptr;
-            for (auto s : fleet.getShips()) {
-                if (s->getID() == shipID) {
-                    selectedShip = s;
-                    break;
-                }
-            }
-
-            if (!selectedShip) {
-                cout << "Ship with ID " << shipID << " not found in your fleet." << endl;
-                return false;
-            }
-
-            // Verificar si el barco está destruido
-            if (selectedShip->isDestroyed()) {
-                cout << "The ship " << selectedShip->getName() << " is destroyed and cannot be moved." << endl;
-                return false;
-            }
-
-            // Pedir nuevas coordenadas para el barco
-            cout << "Enter the new starting row for " << selectedShip->getName() << ": ";
-            cin >> row;
-            cout << "Enter the new starting column for " << selectedShip->getName() << ": ";
-            cin >> col;
-            cout << "Enter orientation (h for horizontal, v for vertical): ";
-            cin >> orientation;
-
-            // Validación de coordenadas
-            if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
-                cout << "Invalid coordinates. Please enter values within the range of the board (0 to " << BOARD_SIZE - 1 << ")." << endl;
-                return false;
-            }
-
-            bool horizontal = (orientation == 'h');
-
-            // Verificar si el barco cabe en la nueva posición
-            if (horizontal) {
-                if (col + selectedShip->getSize() > BOARD_SIZE) {
-                    cout << "The ship does not fit horizontally on the board." << endl;
-                    return false;
-                }
-
-                // Validar que no haya partes de otros barcos en la nueva ubicación
-                for (int i = 0; i < selectedShip->getSize(); i++) {
-                    if (board[row][col + i] != nullptr && board[row][col + i]->getID() != selectedShip->getID()) {
-                        cout << "The new position is blocked by another ship at position (" 
-                             << row << ", " << col + i << ")." << endl;
-                        return false;
-                    }
-                }
-
-                // Eliminar el barco de la posición anterior
-                for (int i = 0; i < selectedShip->getSize(); i++) {
-                    for (int j = 0; j < BOARD_SIZE; j++) {
-                        for (int k = 0; k < BOARD_SIZE; k++) {
-                            if (board[j][k] == selectedShip) {
-                                board[j][k] = nullptr;
-                            }
-                        }
-                    }
-                }
-
-                // Colocar el barco en la nueva posición
-                for (int i = 0; i < selectedShip->getSize(); i++) {
-                    board[row][col + i] = selectedShip;
-                }
-            } else {  // Vertical
-                if (row + selectedShip->getSize() > BOARD_SIZE) {
-                    cout << "The ship does not fit vertically on the board." << endl;
-                    return false;
-                }
-
-                // Validar que no haya partes de otros barcos en la nueva ubicación
-                for (int i = 0; i < selectedShip->getSize(); i++) {
-                    if (board[row + i][col] != nullptr && board[row + i][col]->getID() != selectedShip->getID()) {
-                        cout << "The new position is blocked by another ship at position (" 
-                             << row + i << ", " << col << ")." << endl;
-                        return false;
-                    }
-                }
-
-                // Eliminar el barco de la posición anterior
-                for (int i = 0; i < selectedShip->getSize(); i++) {
-                    for (int j = 0; j < BOARD_SIZE; j++) {
-                        for (int k = 0; k < BOARD_SIZE; k++) {
-                            if (board[j][k] == selectedShip) {
-                                board[j][k] = nullptr;
-                            }
-                        }
-                    }
-                }
-
-                // Colocar el barco en la nueva posición
-                for (int i = 0; i < selectedShip->getSize(); i++) {
-                    board[row + i][col] = selectedShip;
-                }
-            }
-
-            return true;
-        }
-
-        bool attack(Board& enemyBoard, const int damage) {
-            int row, col;
-        
-            displayHitBoard();  // Muestra el tablero de ataques
-        
-            // Solicitar coordenadas al jugador
-            std::cout << "Enter the coordinates:\n";
-            std::cout << "Row: ";
-            std::cin >> row;
-            std::cout << "Col: ";
-            std::cin >> col;
-        
-            // Verificar si la posición es válida
-            if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
-                std::cout << "Invalid coordinates. Please enter values within the range of the board (0 to " << BOARD_SIZE - 1 << ")." << std::endl;
-                return false;
-            }
-        
-            // Verificar si la posición ya ha sido atacada
-            if (hitBoard[row][col] != nullptr) {
-                std::cout << "This position has already been attacked." << std::endl;
-                return false;
-            }
-        
-            // Realizar el ataque en el tablero enemigo
-            Ship* attackedShip = enemyBoard.getShipAt(row, col);
-            if (attackedShip != nullptr) {
-                hitBoard[row][col] = attackedShip;  // Marcar como hit en el tablero de ataques
-                
-                // Realizar daño al barco atacado
-                attackedShip->takeDamage(damage);  // Supón que el ataque hace 10 de daño. Puedes ajustar este valor.
-                
-                std::cout << "Hit! The ship's health is now " << attackedShip->getHealth() << std::endl;
-                
-                // Verificar si el barco está destruido (opcional, puedes hacer algo si el barco se destruye)
-                if (attackedShip->getHealth() == 0) {
-                    std::cout << "The ship has been destroyed!" << std::endl;
-                }
-        
-                return true;
-            } else {
-                hitBoard[row][col] = nullptr;  // Marcar como miss en el tablero de ataques
-                std::cout << "Miss!" << std::endl;
-                return true;
-            }
-        }
-    
-        bool receiveShot(int row, int col) {
-            if (board[row][col] != nullptr) {
-                Ship* attackedShip = board[row][col];
-                cout << "Hit on " << attackedShip->getName() << "!" << endl;
-                attackedShip->takeDamage(10);  // Aplica el daño al barco
-    
-                // Verificar si el barco está destruido
-                if (attackedShip->isDestroyed()) {
-                    cout << attackedShip->getName() << " has been destroyed!" << endl;
-                }
-                board[row][col] = nullptr;  // Después de recibir el disparo, la casilla se queda vacía
-                return true;
-            } else {
-                cout << "Miss." << endl;
-                return false;
-            }
-        }
-    
-        bool allShipsSunk() const {
-            // Verificar si todos los barcos están destruidos
-            for (int i = 0; i < BOARD_SIZE; i++) {
-                for (int j = 0; j < BOARD_SIZE; j++) {
-                    if (board[i][j] != nullptr && !board[i][j]->isDestroyed()) {
-                        return false;  // Encontramos un barco que no está destruido
-                    }
-                }
-            }
-            return true;
-        }
-
-        Ship* getShipAt(int row, int col) const {
-            if (row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE) {
-                return board[row][col];
-            }
-            return nullptr;
-        }
-        
-        const Fleet& getConstFleet() const{
-            return fleet;
-        }
-
-        Fleet& getFleet() {
-            return fleet;
-        }
-    };
+        Fleet& getFleet();
+};

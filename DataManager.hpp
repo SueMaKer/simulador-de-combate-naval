@@ -81,11 +81,12 @@ public:
         std::cout << "1. Battleship (Cost: 100)\n";
         std::cout << "2. Destroyer (Cost: 80)\n";
         std::cout << "3. Submarine (Cost: 60)\n";
-
+        std::cout << "4. Carrier (Cost: 60)\n";
+        std::cout << "5. Brownie (Cost: 150)\n";
         int option;
         std::cin >> option;
-        std::string name = askString("Name your Battleship!");
-        return ShipFactory::createShip(option, name);
+        
+        return ShipFactory::createShip(option);
     }
 
     // Mostrar un mensaje
@@ -100,5 +101,7 @@ public:
         // Aquí podrías agregar lógica para pasar el turno al siguiente jugador
     }
 
-    
+    void clearScreen() {
+        std::system("clear");
+    }
 };

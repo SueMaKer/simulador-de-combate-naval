@@ -67,19 +67,19 @@ public:
                 turnOver = true;
             }
             int wait = dm.askInt("Press 1 to continue: ", 1, 1);
-            clearScreen();
+            dm.clearScreen();
         }
 
     }
 
     void showBoard(Player& player){
-        clearScreen();
+        dm.clearScreen();
         dm.showMessage("=====Board=====");
         player.getBoard().display();
     }
 
     void showHitBoard(Player& player){
-        clearScreen();
+        dm.clearScreen();
         dm.showMessage("=====Hitboard=====");
         player.getBoard().displayHitBoard();
     }
@@ -105,8 +105,10 @@ public:
     void attack(Player& attacker, Player& defender) {
         attacker.getBoard().getFleet().displayFleet();
         int ship = dm.askInt("Select your Ship: ", 1, attacker.getFleet(1).getSize());
-
-        attacker.getBoard().attack(defender.getBoard(), attacker.getFleet(1).getShipPower(--ship)); 
+        int damage = attacker.getFleet(1).getShipPower(--ship);
+        if(attacker.getBoard().attack(defender.getBoard(), damage)){
+            std::cout << "Damage dealt: " << damage <<".\n";
+        } 
     }
 
     void surrender(Player& player) {
@@ -114,7 +116,5 @@ public:
         exit(0);
     }
 
-    void clearScreen() {
-        std::system("clear");
-    }
+    
 };
