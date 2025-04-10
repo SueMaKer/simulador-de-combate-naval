@@ -19,7 +19,7 @@ class Brownie : public Ship{    //Creating the list, searching through it, measu
 private: 
     Node* head;
     int currentSize;
-    double lastSearchTime; // in milliseconds
+    double lastSearchTime; 
     int lastIterations;
     bool foundLastValue;
 
