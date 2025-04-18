@@ -10,7 +10,7 @@ class Game {
 private:
     std::vector<Player> players;
     DataManager dm;
-    TurnManager* turnManager;  // Ahora es puntero porque se inicializa después
+    TurnManager* turnManager;  
     int currentPlayerIndex;
     bool gameOver;
 
