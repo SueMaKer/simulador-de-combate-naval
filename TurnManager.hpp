@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 
+
 #define CURRENCY  200
 
 class TurnManager {
@@ -17,6 +18,7 @@ public:
         : player1(p1), player2(p2), dm(dm) {}
 
     void playTurn(int currentPlayerIndex) {
+
         Player& currentPlayer = currentPlayerIndex == 0 ? player1 : player2;
         Player& enemyPlayer   = currentPlayerIndex == 0 ? player2 : player1;
 
@@ -55,7 +57,7 @@ public:
                     break;
                 case 7:
                     surrender(currentPlayer);
-                    turnOver = true;
+                    exit(0);
                     break;
                 default:
                     std::cout << "Invalid Option.\n";
@@ -114,6 +116,10 @@ public:
     void surrender(Player& player) {
         std::cout << player.getName() << " surrendered.\n";
         exit(0);
+    }
+
+    bool isMyTurn(const string& playerName) const {
+    return dm.getCurrentTurn() == playerName;
     }
 
     
