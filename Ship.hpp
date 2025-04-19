@@ -36,18 +36,26 @@ class Ship {
         virtual void upgradeShip(){
             cout << "not implemented!" << endl;
         }
+         // Métodos getters
+        string getName() const { return name; }
         char getOrientation() const { return orientation; }
         int getPosX() const { return posx; }
         int getPosY() const { return posy; }
-        string getName() const { return name; }
-        int getHealth() const { return health; }
-        bool isDestroyed() const { return health <= 0; }
         int getSize() const { return size; }
         int getPrice() const { return price; }
-        char getID() const { return id; }  
-        virtual int getPower() {return power;}
-        
+        int getHealth() const { return health; }
+        virtual int getPower() { return power; }
+        char getID() const { return id; }
+        bool isDestroyed() const { return health <= 0; }
+
+        // Métodos setters
+        void setName(const string& newName) { name = newName; }
         void setOrientation(char newOrientation) { orientation = newOrientation; }
         void setPosX(int newPosX) { posx = newPosX; }
         void setPosY(int newPosY) { posy = newPosY; }
+        void setSize(int newSize) { size = newSize; }
+        void setPrice(int newPrice) { price = newPrice; }
+        void setHealth(int newHealth) { health = newHealth; }
+        void setPower(int newPower) { power = newPower; }
+        void setID(char newID) { id = newID; }
     };

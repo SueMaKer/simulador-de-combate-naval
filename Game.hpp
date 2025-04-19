@@ -13,7 +13,6 @@ private:
     TurnManager* turnManager;  
     int currentPlayerIndex;
     bool gameOver;
-    bool multiplayer;
 
 public:
     
@@ -23,7 +22,7 @@ public:
 
         setGameMode();
 
-        if (isLocal()) {
+        if (dm.isLocal()) {
             std::string player1Name = dm.askString("Player 1 Name: ");
             std::string player2Name = dm.askString("Player 2 Name: ");
 
@@ -83,7 +82,7 @@ public:
 
     void start() {
         std::cout << "Welcome to Naval Warfare!\n";
-        if (isLocal()) {
+        if (dm.isLocal()) {
             while (!gameOver) {
                 Player& currentPlayer = players[currentPlayerIndex];
                 std::cout << "\nIt's " << currentPlayer.getName() << "'s turn!\n";
@@ -144,13 +143,11 @@ public:
     
     void setGameMode(){
         if(dm.askInt("Select Game Mode\n1. Local\n2. Multiplayer\n", 1, 2) == 1){
-            multiplayer = false;
+            dm.setMultiplayer(false);
         }else{
-            multiplayer = true;
+            dm.setMultiplayer(true);
         }
     }
 
-    bool isLocal(){
-        return !multiplayer;
-    }
+    
 };

@@ -74,4 +74,6 @@ class Board {
         const Fleet& getConstFleet() const;
 
         Fleet& getFleet();
+
+        bool placeShipAt(Ship* ship, int row, int col, char orientation);
 };

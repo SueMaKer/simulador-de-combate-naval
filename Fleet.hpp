@@ -35,7 +35,16 @@ public:
     void upgradeShip(int index){
         ships[index]->upgradeShip();
     } 
+
     vector<Ship *> getShips(){
         return ships;
+    }
+
+    void clearShips() {
+        for (Ship* ship : ships) {
+            delete ship;
+        }
+        ships.clear();
+        size = 0;
     }
 };

@@ -22,9 +22,17 @@ class DataManager {
 private:
     string player;
     bool isPlayer1;
-
+    ShipFactory factory;
+    bool multiplayer;
 public:
     
+    void setMultiplayer(bool gamemode) {
+        multiplayer = gamemode;
+    }
+
+    bool isLocal() {
+        return !multiplayer;
+    }
 
     // Mostrar información de un jugador
     void showPlayerInfo(const Player& player) const {
@@ -298,6 +306,83 @@ public:
 
     bool isThisPlayer1(){
         return isPlayer1;
+    }
+
+    void saveFleetToFile(bool player1, Player &player) {
+        string path = player1 ? PLAYER1_SHIPS : PLAYER2_SHIPS;
+        ofstream out(path);
+        for (Ship* ship : player.getBoard().getFleet().getShips()) {
+            out << ship->getSize() << ","
+                << ship->getName() << ","
+                << ship->getID() << ","
+                << ship->getPower() << ","
+                << ship->getHealth() << ","
+                << ship->getPrice() << ","
+                << ship->getOrientation() << ","
+                << ship->getPosX() << ","
+                << ship->getPosY() << "\n";
+        }
+        out.close();
+    }
+
+    Ship* createShipFromType(const string& name) {
+        if (name == "Battleship") return factory.createShip(1);
+        if (name == "Cruiser") return factory.createShip(2);
+        if (name == "Destroyer") return factory.createShip(3);
+        if (name == "Carrier") return factory.createShip(4);
+        if (name == "Brownie") return factory.createShip(3);
+        
+        cerr << "Tipo de nave desconocido: " << name << endl;
+        return nullptr;
+    }
+
+    void loadFleetFromFile(bool player1, Player& player) {
+        string path = player1 ? PLAYER1_SHIPS : PLAYER2_SHIPS;
+        ifstream in(path);
+        if (!in.is_open()) {
+            cerr << "No se pudo abrir el archivo: " << path << endl;
+            return;
+        }
+
+        player.getFleet(1).clearShips();  // Limpiar la flota actual
+
+        string line;
+        while (getline(in, line)) {
+            stringstream ss(line);
+            string name, id, orientation;
+            int size, power, health, price, posX, posY;
+
+            // Leer los campos del archivo, separados por comas
+            ss >> size; ss.ignore();
+            getline(ss, name, ',');
+            getline(ss, id, ',');
+            ss >> power; ss.ignore();
+            ss >> health; ss.ignore();
+            ss >> price; ss.ignore();
+            getline(ss, orientation, ',');
+            ss >> posX; ss.ignore();
+            ss >> posY;
+
+            // Crear el barco a partir de la información leída
+            Ship* ship = createShipFromType(name);  // Usamos el ID para crear el barco
+            if (!ship) continue;
+
+            // Establecer los valores del barco leídos del archivo
+            ship->setName(name);
+            ship->setPower(power);
+            ship->setHealth(health);
+            ship->setSize(size);
+            ship->setPrice(price);
+            ship->setOrientation(orientation[0]);  
+            ship->setPosX(posX);
+            ship->setPosY(posY);
+
+            // Añadir el barco a la flota del jugador
+            player.getBoard().placeShipAt(ship, posX, posY, orientation[0]);
+            player.getFleet(1).addShip(ship);
+        }
+
+        in.close();
     }
 
 };

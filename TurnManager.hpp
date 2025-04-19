@@ -21,7 +21,10 @@ public:
 
         Player& currentPlayer = currentPlayerIndex == 0 ? player1 : player2;
         Player& enemyPlayer   = currentPlayerIndex == 0 ? player2 : player1;
-
+        if(!dm.isLocal()){
+            dm.loadFleetFromFile(dm.isThisPlayer1(), currentPlayer);
+            dm.loadFleetFromFile(!dm.isThisPlayer1(), enemyPlayer);
+        }
         int actionsLeft = 3;
         bool turnOver = false;
         currentPlayer.addMoney(CURRENCY);
@@ -68,6 +71,11 @@ public:
                 std::cout << "End of turn.\n";
                 turnOver = true;
             }
+            if(!dm.isLocal()){
+                dm.saveFleetToFile(dm.isThisPlayer1(), currentPlayer);
+                dm.saveFleetToFile(!dm.isThisPlayer1(), enemyPlayer);
+            }
+            
             int wait = dm.askInt("Press 1 to continue: ", 1, 1);
             dm.clearScreen();
         }

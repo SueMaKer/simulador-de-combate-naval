@@ -122,6 +122,50 @@ bool Board::placeShip(Ship* ship) {
     return true;
 }
 
+bool Board::placeShipAt(Ship* ship, int row, int col, char orientation) {
+    if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
+        cerr << "Invalid coordinates (" << row << "," << col << "). Out of board bounds." << endl;
+        return false;
+    }
+
+    bool horizontal = (orientation == 'h' || orientation == 'H');
+
+    // Verificar si el barco cabe
+    if (horizontal) {
+        if (col + ship->getSize() > BOARD_SIZE) {
+            cerr << "Ship doesn't fit horizontally at (" << row << "," << col << ")." << endl;
+            return false;
+        }
+        for (int i = 0; i < ship->getSize(); ++i) {
+            if (board[row][col + i] != nullptr) {
+                cerr << "Collision detected at (" << row << "," << col + i << ")." << endl;
+                return false;
+            }
+        }
+        // Colocar el barco
+        for (int i = 0; i < ship->getSize(); ++i) {
+            board[row][col + i] = ship;
+        }
+    } else {
+        if (row + ship->getSize() > BOARD_SIZE) {
+            cerr << "Ship doesn't fit vertically at (" << row << "," << col << ")." << endl;
+            return false;
+        }
+        for (int i = 0; i < ship->getSize(); ++i) {
+            if (board[row + i][col] != nullptr) {
+                cerr << "Collision detected at (" << row + i << "," << col << ")." << endl;
+                return false;
+            }
+        }
+        // Colocar el barco
+        for (int i = 0; i < ship->getSize(); ++i) {
+            board[row + i][col] = ship;
+        }
+    }
+
+    return true;
+}
+
 bool Board::moveShip() {
     int row, col;
     char orientation;
