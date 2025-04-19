@@ -6,11 +6,14 @@ using namespace std;
 class Ship {
     protected:
         string name;
+        char orientation;
+        int posx;
+        int posy;
         int size;
         int price;
         int health;
         int power;
-        char id;  // Para identificar el barco en el tablero
+        char id;  
     
     public:
         Ship(string name, int size, int price, int health, int power, char id)
@@ -33,7 +36,9 @@ class Ship {
         virtual void upgradeShip(){
             cout << "not implemented!" << endl;
         }
-    
+        char getOrientation() const { return orientation; }
+        int getPosX() const { return posx; }
+        int getPosY() const { return posy; }
         string getName() const { return name; }
         int getHealth() const { return health; }
         bool isDestroyed() const { return health <= 0; }
@@ -41,4 +46,8 @@ class Ship {
         int getPrice() const { return price; }
         char getID() const { return id; }  
         virtual int getPower() {return power;}
+        
+        void setOrientation(char newOrientation) { orientation = newOrientation; }
+        void setPosX(int newPosX) { posx = newPosX; }
+        void setPosY(int newPosY) { posy = newPosY; }
     };

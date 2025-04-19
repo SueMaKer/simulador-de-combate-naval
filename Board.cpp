@@ -91,6 +91,7 @@ bool Board::placeShip(Ship* ship) {
             for (int i = 0; i < ship->getSize(); i++) {
                 board[row][col + i] = ship;  
             }
+
             placed = true;
         } else {
             if (row + ship->getSize() > BOARD_SIZE) {
@@ -110,12 +111,14 @@ bool Board::placeShip(Ship* ship) {
             }
             placed = true;
         }
-
+        ship->setOrientation(orientation);
+        ship->setPosX(row);
+        ship->setPosY(col);
         // Mostrar el tablero después de colocar el barco
         cout << "Current Board:" << endl;
         display();
     }
-
+    
     return true;
 }
 
@@ -232,8 +235,12 @@ bool Board::moveShip() {
         for (int i = 0; i < selectedShip->getSize(); i++) {
             board[row + i][col] = selectedShip;
         }
-    }
 
+    }
+    
+    selectedShip->setOrientation(orientation);
+    selectedShip->setPosX(row);
+    selectedShip->setPosY(col);
     return true;
 }
 
