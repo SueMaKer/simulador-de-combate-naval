@@ -10,7 +10,7 @@
 #include "ShipFactory.hpp"
 using namespace std;
 
-const string DROPBOX_DIR = "/home/emanuel-ramirez/Dropbox/NavalWarfare/"; // Adjust to your system
+const string DROPBOX_DIR = "/home/melissa/Dropbox/NavalWarfare/"; // Adjust to your system
 
 const string STATE_FILE        = DROPBOX_DIR + "state.txt";
 const string PLAYER1_SHIPS     = DROPBOX_DIR + "player1_ships.txt";
