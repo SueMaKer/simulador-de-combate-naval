@@ -1,0 +1,39 @@
+# Archivos de compilación
+*.o
+*.out
+*.exe
+*.a
+*.so
+*.dll
+
+# Binarios personalizados
+naval_warfare
+
+# Archivos temporales
+*~
+*.swp
+.DS_Store
+
+# Archivos de depuración
+*.log
+*.dSYM/
+*.core
+
+# Archivos de configuración del sistema
+.vscode/
+.idea/
+*.code-workspace
+
+# Archivos generados por CMake (si usás)
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Archivos específicos de Dropbox o Windows
+desktop.ini
+Thumbs.db
+
+# JSONs de estado si usás modo online por turnos
+turn.json
+fleet.json
