@@ -106,7 +106,7 @@ int searchWithMetrics(BinarySearchArray& arr, int key) {
 }
 
 // Main para probar
-int main() {
+/* int main() {
     BinarySearchArray arr;
     for (int i = 0; i < 10; i++) {
         arr.insert(i * 2);  // Insertar pares: 0, 2, 4, ..., 18
@@ -131,3 +131,4 @@ int main() {
 
     return 0;
 }
+ */
