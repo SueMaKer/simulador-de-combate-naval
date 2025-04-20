@@ -1,3 +1,4 @@
+/*
 #pragma once
 #include <iostream>
 #include <chrono>
@@ -6,8 +7,6 @@
 using namespace std;
 using namespace std::chrono;
 
-int NUM_OF_ELEMENTS = 1000;
-int DAMAGE_CONSTANT = 800;
 
 // Nodo del BTree (sin cambios)
 class BTreeNode {
@@ -178,3 +177,4 @@ void BTree::search(int k) {
     lastSearchTime = duration<double, std::milli>(stop - start).count();
     foundLastValue = (result != nullptr);
 }
+*/
