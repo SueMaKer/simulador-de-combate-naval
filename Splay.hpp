@@ -14,10 +14,6 @@ public:
 class Splay : public Ship {
 private:
     SplayTreeNode* root;
-    Set set;
-    double lastSearchTime;
-    int lastIterations;
-    bool foundLastValue;
 
     void deleteTree(SplayTreeNode* node);
     void setSet();

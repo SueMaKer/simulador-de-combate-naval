@@ -1,6 +1,6 @@
 #include "RedBlack.hpp"
 
-RedBlack::RedBlack() : Ship("RedBlack", 6, 220, 130, 720, 'R'), root(nullptr), lastIterations(0), lastSearchTime(0), foundLastValue(false) {
+RedBlack::RedBlack() : Ship("RedBlack", 6, 220, 130, 720, 'R'), root(nullptr) {
     setSet();
     populateTree();
 }
@@ -174,12 +174,4 @@ int RedBlack::getPower() {
     int target = (rand() % (NUM_OF_ELEMENTS * 5)) + 1;
     int iterations = search(target);
     return iterations > 0 ? DAMAGE_CONSTANT / iterations : 0;
-}
-
-void RedBlack::printReport() {
-    int damage = getPower();
-    cout << "[Search Result] Value was " << (foundLastValue ? "found." : "not found.") << "\n";
-    cout << "[Damage] " << damage << "\n";
-    cout << "Last search time (ms): " << lastSearchTime << "\n";
-    cout << "Last iterations: " << lastIterations << "\n";
 }

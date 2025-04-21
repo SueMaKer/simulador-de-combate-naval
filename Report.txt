@@ -1,0 +1,35 @@
+------------BinaryTree--------------
+[Search Result] Value was not found.
+[Damage] 1
+Last search time (ms): 0
+Last iterations: 0
+------------------------
+
+------------BinaryTree--------------
+[Search Result] Value was found.
+[Damage] 1
+Last search time (ms): 0.010939
+Last iterations: 762
+------------------------
+
+------------BinaryTree--------------
+[Search Result] Value was not found.
+[Damage] 7
+Last search time (ms): 0.002714
+Last iterations: 137
+------------------------
+
+------------BinaryTree--------------
+[Search Result] Value was not found.
+[Damage] 6
+Last search time (ms): 0.001956
+Last iterations: 164
+------------------------
+
+------------BinaryTree--------------
+[Search Result] Value was not found.
+[Damage] 4
+Last search time (ms): 0.002116
+Last iterations: 207
+------------------------
+

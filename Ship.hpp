@@ -5,9 +5,10 @@
 #include "Set.hpp"
 #include <iostream>
 #include <string>
+#include <fstream>
 
 const int NUM_OF_ELEMENTS = 1000;
-const double DAMAGE_CONSTANT = 10000.0;
+const double DAMAGE_CONSTANT = 1000.0;
 
 
 using namespace std;
@@ -23,6 +24,10 @@ protected:
     int health;
     int power;
     char id;
+    Set set;
+    double lastSearchTime;
+    int lastIterations;
+    bool foundLastValue;
 
 public:
     Ship(string name, int size, int price, int health, int power, char id);
@@ -33,6 +38,9 @@ public:
     virtual void display() const;
     virtual void takeDamage(int dmg);
     virtual void upgradeShip();
+
+    void printReport();
+    
 
     // Métodos getters
     string getName() const;

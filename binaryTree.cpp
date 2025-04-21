@@ -9,10 +9,7 @@ BinaryTree::BTNode::BTNode(int val) : key(val), left(nullptr), right(nullptr) {}
 // --- Constructor ---
 BinaryTree::BinaryTree()
     : Ship("BinaryTree", 4, 150, 100, 500, 'B'),
-      root(nullptr),
-      lastIterations(0),
-      lastSearchTime(0),
-      foundLastValue(false) {
+      root(nullptr) {
     setSet();
     populateTree();
 }
@@ -92,12 +89,4 @@ int BinaryTree::getPower() {
     int target = (rand() % (NUM_OF_ELEMENTS * 5)) + 1;
     int iterations = search(target);
     return iterations > 0 ? DAMAGE_CONSTANT / iterations : 0;
-}
-
-// --- Display search and damage info ---
-void BinaryTree::printReport() {
-    cout << "[Search Result] Value was " << (foundLastValue ? "found." : "not found.") << "\n";
-    cout << "[Damage] " << getPower() << "\n";
-    cout << "Last search time (ms): " << lastSearchTime << "\n";
-    cout << "Last iterations: " << lastIterations << "\n";
 }

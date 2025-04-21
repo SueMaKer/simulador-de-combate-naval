@@ -17,10 +17,6 @@ struct RBNode {
 class RedBlack : public Ship {
 private:
     RBNode* root;
-    Set set;
-    int lastIterations;
-    double lastSearchTime;
-    bool foundLastValue;
 
 public:
     RedBlack();
@@ -36,5 +32,4 @@ public:
     void fixViolation(RBNode*& node);
     int search(int key);
     int getPower() override;
-    void printReport();
 };

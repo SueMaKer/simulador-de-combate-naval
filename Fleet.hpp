@@ -24,4 +24,6 @@ public:
     std::vector<Ship*> getShips();
 
     void clearShips();
+
+    void setShipInfo(int index);
 };

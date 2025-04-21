@@ -1,34 +1,35 @@
 #pragma once
 #include "Ship.hpp"
-#include "Battleship.hpp"
-#include "Cruiser.hpp"
-#include "Destroyer.hpp"
-#include "Carrier.hpp"
+
 #include "Brownie.hpp"
+#include "Splay.hpp"
+#include "RedBlack.hpp"
+#include "BinaryTree.hpp"
+#include "BTree.hpp"
 
 class ShipFactory {
 public:
 
     enum class ShipType {
-        Battleship = 1,
-        Cruiser,
-        Destroyer,
-        Carrier,
-        Brownie
+        Splay = 1,
+        RedBlack,
+        BinaryTree,
+        Brownie,
+        BTree,
     };
 
     static Ship* createShip(ShipType type) {
         switch (type) {
-            case ShipType::Battleship:
-                return new Battleship("Battleship");
-            case ShipType::Cruiser:
-                return new Cruiser("Cruiser");
-            case ShipType::Destroyer:
-                return new Destroyer("Destroyer");
-            case ShipType::Carrier:
-                return new Carrier("Carrier");
+            case ShipType::Splay:
+                return new Splay();
+            case ShipType::RedBlack:
+                return new RedBlack();
+            case ShipType::BinaryTree:
+                return new BinaryTree();
             case ShipType::Brownie:
                 return new Brownie();
+            case ShipType::BTree:
+                return new BTree();    
             default:
                 return nullptr;
         }
@@ -38,11 +39,11 @@ public:
 
     static ShipType fromInt(int value) {
         switch (value) {
-            case 1: return ShipType::Battleship;
-            case 2: return ShipType::Cruiser;
-            case 3: return ShipType::Destroyer;
-            case 4: return ShipType::Carrier;
-            case 5: return ShipType::Brownie;
+            case 1: return ShipType::Splay;
+            case 2: return ShipType::RedBlack;
+            case 3: return ShipType::BinaryTree;
+            case 4: return ShipType::Brownie;
+            case 5: return ShipType::BTree;
             default: throw invalid_argument("Valor inválido para ShipType: " + to_string(value));
         }
     }

@@ -28,6 +28,10 @@ int Fleet::getShipPower(int index) {
     return ships[index]->getPower();
 }
 
+void Fleet::setShipInfo(int index){
+    ships[index]->printReport();
+}
+
 void Fleet::upgradeShip(int index) {
     ships[index]->upgradeShip();
 }

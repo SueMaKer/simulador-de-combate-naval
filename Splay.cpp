@@ -5,7 +5,7 @@ using namespace std::chrono;
 
 SplayTreeNode::SplayTreeNode(int val) : key(val), left(nullptr), right(nullptr) {}
 
-Splay::Splay() : Ship("Splay", 5, 200, 120, 700, 'S'), root(nullptr), lastSearchTime(0), lastIterations(0), foundLastValue(false) {
+Splay::Splay() : Ship("Splay", 5, 200, 120, 700, 'S'), root(nullptr){
     setSet();
     populateTree();
 }
@@ -74,12 +74,6 @@ int Splay::getPower() {
     return iterations > 0 ? DAMAGE_CONSTANT / iterations : 0;
 }
 
-void Splay::printReport() {
-    cout << "[Search Result] Value was " << (foundLastValue ? "found." : "not found.") << "\n";
-    cout << "[Damage] " << getPower() << "\n";
-    cout << "Last search time (ms): " << lastSearchTime << "\n";
-    cout << "Last iterations: " << lastIterations << "\n";
-}
 
 SplayTreeNode* Splay::rightRotate(SplayTreeNode* x) {
     ++lastIterations;

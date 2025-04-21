@@ -5,7 +5,7 @@
 #include <chrono>
 #include <algorithm>
 
-class Ship {
+/* class Ship {
 public:
     virtual void fill() = 0;
     virtual bool search(int target) = 0;
@@ -76,7 +76,7 @@ public:
         std::cout << "Last search time (ms): " << lastSearchTime << "\n";
         std::cout << "Last iterations: " << iterations << "\n";
     }
-};
+}; */
 
 /* int main() {
     Centinela sentinelShip;

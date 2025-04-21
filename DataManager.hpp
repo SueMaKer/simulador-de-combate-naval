@@ -105,11 +105,10 @@ public:
     // Solicitar nuevo barco
     Ship* askShipToCreate() {
         cout << "Choose the type of ship to buy:\n";
-        cout << "1. Battleship (Cost: 100)\n";
-        cout << "2. Destroyer (Cost: 80)\n";
-        cout << "3. Submarine (Cost: 60)\n";
-        cout << "4. Carrier (Cost: 60)\n";
-        cout << "5. Brownie (Cost: 150)\n";
+        cout << "1. Splay (Cost: 200)\n";
+        cout << "2. RedBlack (Cost: 220)\n";
+        cout << "3. BinaryTree (Cost: 150)\n";
+        cout << "4. Brownie (Cost: 240)\n";
         int option;
         cin >> option;
         
@@ -326,11 +325,10 @@ public:
     }
 
     Ship* createShipFromType(const string& name) {
-        if (name == "Battleship") return factory.createShip(1);
-        if (name == "Cruiser") return factory.createShip(2);
-        if (name == "Destroyer") return factory.createShip(3);
-        if (name == "Carrier") return factory.createShip(4);
-        if (name == "Brownie") return factory.createShip(3);
+        if (name == "Splay") return factory.createShip(1);
+        if (name == "RedBlack") return factory.createShip(2);
+        if (name == "BinaryTree") return factory.createShip(3);
+        if (name == "Brownie") return factory.createShip(4);
         
         cerr << "Tipo de nave desconocido: " << name << endl;
         return nullptr;

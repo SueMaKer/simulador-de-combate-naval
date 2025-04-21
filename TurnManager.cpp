@@ -108,9 +108,10 @@ void TurnManager::upgradeShip(Player& player) {
 void TurnManager::attack(Player& attacker, Player& defender) {
     attacker.getBoard().getFleet().displayFleet();
     int ship = dm.askInt("Select your Ship: ", 1, attacker.getFleet(1).getSize());
-    int damage = attacker.getFleet(1).getShipPower(--ship);
+    int damage = attacker.getFleet(1).getShipPower(ship - 1);
     if(attacker.getBoard().attack(defender.getBoard(), damage)){
         std::cout << "Damage dealt: " << damage <<".\n";
+        attacker.getFleet(1).setShipInfo(ship - 1);
     } 
 }
 

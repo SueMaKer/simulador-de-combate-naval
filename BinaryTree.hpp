@@ -20,10 +20,6 @@ private:
     };
 
     BTNode* root;
-    Set set;
-    int lastIterations;
-    double lastSearchTime;
-    bool foundLastValue;
 
     void setSet();
     void populateTree();
