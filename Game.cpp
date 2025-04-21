@@ -1,17 +1,19 @@
 #include "Game.hpp"
 
+// Constructor: Initializes the game depending on the selected mode (local or multiplayer)
 Game::Game() : currentPlayerIndex(0), gameOver(false) {
 
-    setGameMode();
+    setGameMode(); // Ask the user to choose the game mode
 
     if (dm.isLocal()) {
+        // Local mode: ask for player names and create initial ships
         std::string player1Name = dm.askString("Player 1 Name: ");
         std::string player2Name = dm.askString("Player 2 Name: ");
 
         players.push_back(Player(player1Name));
         players.push_back(Player(player2Name));
 
-        // Crear barco inicial a cada jugador
+        // Each player creates their first ship
         for (auto& player : players) {
             dm.showPlayerInfo(player);
             Ship* newShip = dm.askShipToCreate();
@@ -21,30 +23,36 @@ Game::Game() : currentPlayerIndex(0), gameOver(false) {
             }
         }
 
-        // Inicializamos el TurnManager pasándole los dos jugadores y DataManager
+        // Initialize TurnManager with both players
         turnManager = new TurnManager(players[0], players[1], dm);
         dm.clearScreen();
 
     } else {
+        // Multiplayer mode: setup game using Dropbox files
         dm.showMessage("Multiplayer");
         dm.initializeGameWithPlayers();
         dm.verifyAndSetupFiles();
+
         players.push_back(Player(dm.getPlayer1Name()));
         players.push_back(Player(dm.getPlayer2Name()));
+
         turnManager = new TurnManager(players[0], players[1], dm);
         dm.showMessage("Done correctly");
     }
 }
 
+// Destructor: Cleans up Dropbox files and deletes the TurnManager
 Game::~Game() {
     dm.cleanDropboxContents();
     delete turnManager;
 }
 
+// Switch to the next player's turn
 void Game::nextTurn() {
     currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
 }
 
+// Check if the game is over (only one or zero players left alive)
 bool Game::checkGameOver() {
     int alive = 0;
     for (auto& player : players) {
@@ -58,9 +66,12 @@ bool Game::checkGameOver() {
     return false;
 }
 
+// Start the main game loop (local or multiplayer)
 void Game::start() {
     std::cout << "Welcome to Naval Warfare!\n";
+
     if (dm.isLocal()) {
+        // Local game loop
         while (!gameOver) {
             Player& currentPlayer = players[currentPlayerIndex];
             std::cout << "\nIt's " << currentPlayer.getName() << "'s turn!\n";
@@ -78,8 +89,9 @@ void Game::start() {
                 nextTurn();
             }
         }
+
     } else {
-        // Modo multiplayer
+        // Multiplayer game loop using Dropbox turn system
         std::string myTurn = dm.isThisPlayer1() ? dm.getPlayer1Name() : dm.getPlayer2Name();
         std::string otherTurn = dm.isThisPlayer1() ? dm.getPlayer2Name() : dm.getPlayer1Name();
         int myIndex = dm.isThisPlayer1() ? 0 : 1;
@@ -89,7 +101,7 @@ void Game::start() {
             Player& currentPlayer = players[myIndex];
             Player& otherPlayer = players[otherIndex];
 
-            // ⏳ Esperar mi turno
+            // ⏳ Wait until it's this player's turn
             while (dm.getCurrentTurn() != myTurn) {
                 dm.clearScreen();
                 std::cout << "\nIt's " << otherPlayer.getName() << "'s turn!";
@@ -108,12 +120,13 @@ void Game::start() {
                 break;
             }
 
-            // Cambiar el turno en Dropbox
+            // Set the next turn in Dropbox
             dm.setCurrentTurn(otherTurn);
         }
     }
 }
 
+// Ask the user to select the game mode: 1 (Local) or 2 (Multiplayer)
 void Game::setGameMode() {
     if (dm.askInt("Select Game Mode\n1. Local\n2. Multiplayer\n", 1, 2) == 1) {
         dm.setMultiplayer(false);

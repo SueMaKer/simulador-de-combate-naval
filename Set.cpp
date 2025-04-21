@@ -1,14 +1,14 @@
 #include "Set.hpp"
 
-// Constructor
+// Constructor: Initializes an empty set
 Set::Set() : root(nullptr) {}
 
-// Destructor
+// Destructor: Frees memory by clearing the entire tree
 Set::~Set() {
     clear(root);
 }
 
-// Método recursivo para insertar un valor en el árbol
+// Recursive helper to insert a value into the tree
 Set::Node* Set::insert(Node* node, int value) {
     if (!node) return new Node(value);
     if (value < node->value)
@@ -18,7 +18,7 @@ Set::Node* Set::insert(Node* node, int value) {
     return node;
 }
 
-// Método recursivo para buscar un valor en el árbol
+// Recursive helper to search for a value in the tree
 bool Set::search(Node* node, int value) const {
     if (!node) return false;
     if (value == node->value) return true;
@@ -28,33 +28,41 @@ bool Set::search(Node* node, int value) const {
         return search(node->right, value);
 }
 
-// Encuentra el valor mínimo en el árbol (más a la izquierda)
+// Finds the minimum node (left-most node) in the subtree
 Set::Node* Set::findMin(Node* node) {
     while (node && node->left)
         node = node->left;
     return node;
 }
 
-// Método recursivo para eliminar un valor en el árbol
+// Recursive helper to remove a value from the tree
 Set::Node* Set::remove(Node* node, int value) {
     if (!node) return nullptr;
+
     if (value < node->value) {
         node->left = remove(node->left, value);
     } else if (value > node->value) {
         node->right = remove(node->right, value);
     } else {
+        // Node with no children
         if (!node->left && !node->right) {
             delete node;
             return nullptr;
-        } else if (!node->left) {
+        }
+        // Node with only right child
+        else if (!node->left) {
             Node* temp = node->right;
             delete node;
             return temp;
-        } else if (!node->right) {
+        }
+        // Node with only left child
+        else if (!node->right) {
             Node* temp = node->left;
             delete node;
             return temp;
-        } else {
+        }
+        // Node with two children: find in-order successor
+        else {
             Node* temp = findMin(node->right);
             node->value = temp->value;
             node->right = remove(node->right, temp->value);
@@ -63,7 +71,7 @@ Set::Node* Set::remove(Node* node, int value) {
     return node;
 }
 
-// Método recursivo para mostrar los valores del conjunto en orden
+// Recursive in-order traversal to print tree values
 void Set::display(Node* node) const {
     if (!node) return;
     display(node->left);
@@ -71,7 +79,7 @@ void Set::display(Node* node) const {
     display(node->right);
 }
 
-// Método recursivo para limpiar el árbol (destruir los nodos)
+// Recursive helper to delete all nodes in the tree
 void Set::clear(Node* node) {
     if (!node) return;
     clear(node->left);
@@ -79,13 +87,13 @@ void Set::clear(Node* node) {
     delete node;
 }
 
-// Método recursivo para obtener el tamaño del conjunto
+// Recursive helper to compute total number of nodes in the tree
 int Set::getSize(Node* node) const {
     if (!node) return 0;
     return 1 + getSize(node->left) + getSize(node->right);
 }
 
-// Método recursivo para obtener el elemento en una posición específica
+// Recursive helper to get an element by index (in-order)
 bool Set::getElementAt(Node* node, int& counter, int index, int& result) const {
     if (!node) return false;
 
@@ -100,7 +108,7 @@ bool Set::getElementAt(Node* node, int& counter, int index, int& result) const {
     return getElementAt(node->right, counter, index, result);
 }
 
-// Método para insertar un valor en el conjunto
+// Public method to insert a value into the set
 void Set::insert(int value) {
     if (!search(value)) {
         root = insert(root, value);
@@ -110,12 +118,12 @@ void Set::insert(int value) {
     }
 }
 
-// Método para buscar un valor en el conjunto
+// Public method to search for a value in the set
 bool Set::search(int value) const {
     return search(root, value);
 }
 
-// Método para eliminar un valor del conjunto
+// Public method to remove a value from the set
 void Set::remove(int value) {
     if (search(value)) {
         root = remove(root, value);
@@ -125,24 +133,24 @@ void Set::remove(int value) {
     }
 }
 
-// Método para mostrar los valores del conjunto en orden
+// Public method to display all values in the set (in-order)
 void Set::display() const {
     std::cout << "Set contents: ";
     display(root);
     std::cout << "\n";
 }
 
-// Método para obtener el tamaño del conjunto
+// Public method to get the number of elements in the set
 int Set::getSize() const {
     return getSize(root);
 }
 
-// Método para obtener un elemento en una posición específica
+// Public method to get the value at a given index (0-based, in-order)
 int Set::getElement(int index) const {
     int size = getSize();
     if (index < 0 || index >= size) {
         std::cerr << "Index out of bounds\n";
-        return -1; // o lanza una excepción si prefieres
+        return -1; 
     }
 
     int counter = 0;

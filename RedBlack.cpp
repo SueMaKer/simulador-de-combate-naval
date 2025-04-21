@@ -1,28 +1,33 @@
 #include "RedBlack.hpp"
 
+// Constructor for RedBlack ship
 RedBlack::RedBlack() : Ship("RedBlack", 6, 220, 130, 720, 'R'), root(nullptr) {
-    setSet();
-    populateTree();
+    setSet();          // Generate a set of random values
+    populateTree();    // Insert values into the Red-Black Tree
 }
 
+// Destructor - deletes all nodes in the tree
 RedBlack::~RedBlack() {
     deleteTree(root);
 }
 
+// Generates a set of unique random integers
 void RedBlack::setSet() {
-    srand(static_cast<unsigned int>(time(nullptr)));  // Inicializar srand solo una vez
+    srand(static_cast<unsigned int>(time(nullptr)));  // Initialize random seed
     for (int i = 0; i < NUM_OF_ELEMENTS; ++i) {
         int val = (rand() % (NUM_OF_ELEMENTS * 5)) + 1;
         set.insert(val);
     }
 }
 
+// Inserts all elements from the set into the Red-Black Tree
 void RedBlack::populateTree() {
     for (int i = 0; i < set.getSize(); ++i) {
         insert(set.getElement(i));
     }
 }
 
+// Recursively deletes all nodes from the tree
 void RedBlack::deleteTree(RBNode* node) {
     if (!node) return;
     deleteTree(node->left);
@@ -30,12 +35,14 @@ void RedBlack::deleteTree(RBNode* node) {
     delete node;
 }
 
+// Public method to insert a value into the Red-Black Tree
 void RedBlack::insert(int key) {
     RBNode* node = new RBNode(key);
-    root = bstInsert(root, node);
-    fixViolation(node);
+    root = bstInsert(root, node);  // Standard BST insert
+    fixViolation(node);            // Fix Red-Black Tree properties
 }
 
+// BST-style insertion used by the Red-Black Tree
 RBNode* RedBlack::bstInsert(RBNode* root, RBNode* node) {
     if (!root) return node;
 
@@ -49,6 +56,7 @@ RBNode* RedBlack::bstInsert(RBNode* root, RBNode* node) {
     return root;
 }
 
+// Performs a left rotation around node x
 void RedBlack::rotateLeft(RBNode*& root, RBNode*& x) {
     RBNode* y = x->right;
     x->right = y->left;
@@ -69,6 +77,7 @@ void RedBlack::rotateLeft(RBNode*& root, RBNode*& x) {
     x->parent = y;
 }
 
+// Performs a right rotation around node y
 void RedBlack::rotateRight(RBNode*& root, RBNode*& y) {
     RBNode* x = y->left;
     y->left = x->right;
@@ -89,6 +98,7 @@ void RedBlack::rotateRight(RBNode*& root, RBNode*& y) {
     y->parent = x;
 }
 
+// Fixes Red-Black Tree property violations after insertion
 void RedBlack::fixViolation(RBNode*& node) {
     RBNode* parent = nullptr;
     RBNode* grandparent = nullptr;
@@ -97,7 +107,7 @@ void RedBlack::fixViolation(RBNode*& node) {
         parent = node->parent;
         grandparent = parent->parent;
 
-        // Parent is left child of grandparent
+        // Case: Parent is left child of grandparent
         if (parent == grandparent->left) {
             RBNode* uncle = grandparent->right;
 
@@ -120,7 +130,8 @@ void RedBlack::fixViolation(RBNode*& node) {
                 swap(parent->color, grandparent->color);
                 node = parent;
             }
-        } else { // Parent is right child
+        } else {
+            // Case: Parent is right child of grandparent
             RBNode* uncle = grandparent->left;
 
             if (uncle != nullptr && uncle->color == RED) {
@@ -142,9 +153,10 @@ void RedBlack::fixViolation(RBNode*& node) {
         }
     }
 
-    root->color = BLACK;
+    root->color = BLACK;  // Root must always be black
 }
 
+// Searches for a value in the tree, records search time and steps
 int RedBlack::search(int key) {
     lastIterations = 0;
     foundLastValue = false;
@@ -164,14 +176,15 @@ int RedBlack::search(int key) {
     }
 
     auto stop = high_resolution_clock::now();
-    lastSearchTime = duration<double, std::milli>(stop - start).count();
+    lastSearchTime = duration<double, std::milli>(stop - start).count();  // Search time in milliseconds
 
     return lastIterations;
 }
 
+// Calculates ship's power based on how efficient the search is
 int RedBlack::getPower() {
     srand(static_cast<unsigned int>(time(nullptr)));
     int target = (rand() % (NUM_OF_ELEMENTS * 5)) + 1;
-    int iterations = search(target);
+    int iterations = search(target); 
     return iterations > 0 ? DAMAGE_CONSTANT / iterations : 0;
 }
