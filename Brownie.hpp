@@ -11,12 +11,12 @@ public:
     Node(int val) : value(val), next(nullptr) {}
 };
 
-class Brownie : public Ship{    //Creating the list, searching through it, measuring time and iteration count and calculating damage.
+class Brownie : public Ship{   
 private: 
     Node* head;
     int currentSize;
 
-public: //Initializes the list and immediately fills it with random values.
+public: 
     Brownie() : head(nullptr), currentSize(0), Ship("Brownie", 4, 240, 100, 650, 'B'){
         populateList();
     }
@@ -80,7 +80,7 @@ public: //Initializes the list and immediately fills it with random values.
         lastSearchTime = std::chrono::duration<double, std::milli>(end - start).count();
     }
 
-    int getPower() override{        //Less iterations = higher damage.
+    int getPower() override{        
         search(23);
         return lastIterations > 0 ? DAMAGE_CONSTANT / lastIterations : 0.0;
     }

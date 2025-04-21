@@ -2,7 +2,7 @@
 #include "Ship.hpp"
 
 
-const int BTREE_T = 3; // grado mínimo (puede ajustarse)
+const int BTREE_T = 3; 
 
 class BTreeNode {
 public:

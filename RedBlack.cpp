@@ -176,7 +176,7 @@ int RedBlack::search(int key) {
     }
 
     auto stop = high_resolution_clock::now();
-    lastSearchTime = duration<double, std::milli>(stop - start).count();  // Search time in milliseconds
+    lastSearchTime = duration<double, std::milli>(stop - start).count();  
 
     return lastIterations;
 }

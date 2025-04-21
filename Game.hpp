@@ -17,8 +17,8 @@ private:
     bool gameOver;
 
 public:
-    Game();  // Constructor
-    ~Game();  // Destructor
+    Game();  
+    ~Game();  
 
     void nextTurn();
     bool checkGameOver();

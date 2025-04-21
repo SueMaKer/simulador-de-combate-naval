@@ -6,6 +6,8 @@
 #include "RedBlack.hpp"
 #include "BinaryTree.hpp"
 #include "BTree.hpp"
+#include "SetShip.hpp"
+#include "LinkedList.hpp"
 
 class ShipFactory {
 public:
@@ -14,8 +16,9 @@ public:
         Splay = 1,
         RedBlack,
         BinaryTree,
-        Brownie,
         BTree,
+        Set,
+        LinkedList
     };
 
     static Ship* createShip(ShipType type) {
@@ -26,10 +29,12 @@ public:
                 return new RedBlack();
             case ShipType::BinaryTree:
                 return new BinaryTree();
-            case ShipType::Brownie:
-                return new Brownie();
             case ShipType::BTree:
                 return new BTree();    
+            case ShipType::Set:
+                return new SetShip(); 
+            case ShipType::LinkedList:
+                return new LinkedList();   
             default:
                 return nullptr;
         }
@@ -42,8 +47,9 @@ public:
             case 1: return ShipType::Splay;
             case 2: return ShipType::RedBlack;
             case 3: return ShipType::BinaryTree;
-            case 4: return ShipType::Brownie;
-            case 5: return ShipType::BTree;
+            case 4: return ShipType::BTree;
+            case 5: return ShipType::Set;
+            case 6: return ShipType::LinkedList;
             default: throw invalid_argument("Valor inválido para ShipType: " + to_string(value));
         }
     }
@@ -51,7 +57,7 @@ public:
     static Ship* createShip(int choice) {
         try {
             ShipType type = fromInt(choice);
-            return createShip(type);  // Llama a la versión con enum
+            return createShip(type); 
         } catch (const std::exception& e) {
             cerr << e.what() << endl;
             return nullptr;

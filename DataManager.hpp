@@ -10,7 +10,7 @@
 #include "ShipFactory.hpp"
 using namespace std;
 
-const string DROPBOX_DIR = "/home/melissa/Dropbox/NavalWarfare/"; // Adjust to your system
+const string DROPBOX_DIR = "/home/melissa/Dropbox/NavalWarfare/"; 
 
 const string STATE_FILE        = DROPBOX_DIR + "state.txt";
 const string PLAYER1_SHIPS     = DROPBOX_DIR + "player1_ships.txt";
@@ -34,7 +34,7 @@ public:
         return !multiplayer;
     }
 
-    // Mostrar información de un jugador
+    
     void showPlayerInfo(const Player& player) const {
         cout << "=============Info==============\n";
         cout << "Player: " << player.getName() << "\n";
@@ -45,22 +45,21 @@ public:
         player.getFleet().displayFleet();
     }
 
-    // Mostrar información del jugador actual
+    
     void showCurrentPlayerInfo(const Player& player) const {
         showPlayerInfo(player);  // Mostrar solo la información del jugador actual
     }
 
-    // Mostrar información de todos los jugadores
+  
     void showAllPlayersInfo(const vector<Player>& players) const {
         for (const auto& player : players) {
             showPlayerInfo(player);
         }
     }
 
-    // Mostrar el tablero del jugador
     void showPlayerBoard(Player& player) const {
         cout << "=============Player's Board==============\n";
-        player.getBoard().display();  // Suponiendo que la clase Player tiene un método `getBoard`
+        player.getBoard().display();  
     }
 
     int showOptions() {
@@ -76,7 +75,7 @@ public:
         return askInt("What would you like to do? :", 1, 7);
     }
 
-    // Solicitar string
+    
     string askString(const string& message) const {
         string input;
         cout << message;
@@ -84,7 +83,7 @@ public:
         return input;
     }
 
-    // Solicitar número entero
+    
     int askInt(const string& message, int min, int max) const {
         int number;
         while (true) {
@@ -92,39 +91,40 @@ public:
             cin >> number;
 
             if (cin.fail() || number < min || number > max) {
-                cin.clear(); // limpia error
-                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // limpia buffer
+                cin.clear(); 
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Invalid input. Please enter a number between " << min << " and " << max << ".\n";
             } else {
-                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // limpia buffer
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
                 return number;
             }
         }
     }
 
-    // Solicitar nuevo barco
     Ship* askShipToCreate() {
         cout << "Choose the type of ship to buy:\n";
         cout << "1. Splay (Cost: 200)\n";
         cout << "2. RedBlack (Cost: 220)\n";
         cout << "3. BinaryTree (Cost: 150)\n";
-        cout << "4. Brownie (Cost: 240)\n";
+        cout << "4. BTree (Cost: 200)\n";
+        cout << "5. Set (Cost: 150)\n";
+        cout << "6. LinkedLink (Cost: 150)\n";
         int option;
         cin >> option;
         
         return ShipFactory::createShip(option);
     }
 
-    // Mostrar un mensaje
+ 
     void showMessage(const string& message) const {
         cout << message << endl;
     }
 
-    // Cambiar entre los jugadores
+   
     void switchTurn(Player& currentPlayer, Player& nextPlayer) const {
         cout << "Switching turn...\n";
         showMessage("It's now " + nextPlayer.getName() + "'s turn.");
-        // Aquí podrías agregar lógica para pasar el turno al siguiente jugador
+        
     }
 
     void clearScreen() {
@@ -163,7 +163,7 @@ public:
         string line;
         while (getline(file, line)) {
             if (line.rfind("turn:", 0) == 0) { 
-                return line.substr(5); // salta "turn:"
+                return line.substr(5); 
             }
         }
         return "unknown";
@@ -191,7 +191,7 @@ public:
     void initializeGameWithPlayers() {
         string player1;
 
-        // Crear archivo si no existe
+       
         if (!filesystem::exists(STATE_FILE)) {
             string player1Name;
             cout << "You are the first player! Enter your name: ";
@@ -201,7 +201,7 @@ public:
 
             ofstream out(STATE_FILE);
             out << "player1:" << player1 << "\n";
-            out << "player2:\n";  // Aún no se une el segundo jugador
+            out << "player2:\n";  
             out << "turn:" << player1 << "\n";
             out << "last_shot:-1,-1\n";
             out << "result:none\n";
@@ -209,7 +209,7 @@ public:
 
             cout << "✅ Waiting for second player to join...\n";
 
-            // Espera hasta que el segundo jugador ingrese
+          
             while (true) {
                 this_thread::sleep_for(chrono::seconds(2));
                 ifstream in(STATE_FILE);
@@ -222,7 +222,7 @@ public:
                 }
             }
         } else {
-            // Archivo ya existe, ver si el segundo jugador ya se unió
+          
             fstream file(STATE_FILE, ios::in | ios::out);
             string line, content;
             string player2;
@@ -242,7 +242,7 @@ public:
                 return;
             }
 
-            // No hay player2, pedir nombre y agregarlo
+     
             string player2Name;
             cout << "You are the second player! Enter your name: ";
             getline(cin, player2Name);
@@ -250,13 +250,13 @@ public:
             isPlayer1 = false;
 
 
-            // Reemplazar línea de player2
+        
             size_t pos = content.find("player2:");
             if (pos != string::npos) {
                 content.replace(pos, content.find("\n", pos) - pos, "player2:" + player2Name);
             }
 
-            // Reescribir el archivo
+            
             ofstream out(STATE_FILE);
             out << content;
             out.close();
@@ -270,7 +270,7 @@ public:
         string line;
         while (getline(file, line)) {
             if (line.rfind("player1:", 0) == 0) {
-                return line.substr(8); // salta "player1:"
+                return line.substr(8); 
             }
         }
         return "";
@@ -281,7 +281,7 @@ public:
         string line;
         while (getline(file, line)) {
             if (line.rfind("player2:", 0) == 0) {
-                return line.substr(8); // salta "player2:"
+                return line.substr(8); 
             }
         }
         return "";
@@ -293,12 +293,12 @@ public:
         for (const auto& entry : filesystem::directory_iterator(DROPBOX_DIR)) {
             try {
                 if (filesystem::is_directory(entry)) {
-                    filesystem::remove_all(entry); // Elimina subcarpetas
+                    filesystem::remove_all(entry); 
                 } else {
-                    filesystem::remove(entry);     // Elimina archivos
+                    filesystem::remove(entry);     
                 }
             } catch (const filesystem::filesystem_error& e) {
-                // Ignorar errores
+                
             }
         }
     }
@@ -329,7 +329,7 @@ public:
         if (name == "RedBlack") return factory.createShip(2);
         if (name == "BinaryTree") return factory.createShip(3);
         if (name == "Brownie") return factory.createShip(4);
-        
+        if (name == "BTree") return factory.createShip(5);
         cerr << "Tipo de nave desconocido: " << name << endl;
         return nullptr;
     }
@@ -342,7 +342,7 @@ public:
             return;
         }
 
-        player.getFleet(1).clearShips();  // Limpiar la flota actual
+        player.getFleet(1).clearShips();  
 
         string line;
         while (getline(in, line)) {
@@ -350,7 +350,7 @@ public:
             string name, id, orientation;
             int size, power, health, price, posX, posY;
 
-            // Leer los campos del archivo, separados por comas
+         
             ss >> size; ss.ignore();
             getline(ss, name, ',');
             getline(ss, id, ',');
@@ -361,11 +361,11 @@ public:
             ss >> posX; ss.ignore();
             ss >> posY;
 
-            // Crear el barco a partir de la información leída
-            Ship* ship = createShipFromType(name);  // Usamos el ID para crear el barco
+            
+            Ship* ship = createShipFromType(name);  
             if (!ship) continue;
 
-            // Establecer los valores del barco leídos del archivo
+            
             ship->setName(name);
             ship->setPower(power);
             ship->setHealth(health);
@@ -375,7 +375,7 @@ public:
             ship->setPosX(posX);
             ship->setPosY(posY);
 
-            // Añadir el barco a la flota del jugador
+            
             player.getBoard().placeShipAt(ship, posX, posY, orientation[0]);
             player.getFleet(1).addShip(ship);
         }

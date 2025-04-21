@@ -20,7 +20,7 @@ public:
 
     Board& getBoard();
     const Fleet& getFleet() const;
-    Fleet& getFleet(int rand); // rand para usar la no constante
+    Fleet& getFleet(int rand); 
 
     bool isAlive() const;
     bool canAfford(int amount) const;

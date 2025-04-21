@@ -101,7 +101,7 @@ void Game::start() {
             Player& currentPlayer = players[myIndex];
             Player& otherPlayer = players[otherIndex];
 
-            // ⏳ Wait until it's this player's turn
+            //  Wait until it's this player's turn
             while (dm.getCurrentTurn() != myTurn) {
                 dm.clearScreen();
                 std::cout << "\nIt's " << otherPlayer.getName() << "'s turn!";
