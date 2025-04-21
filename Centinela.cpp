@@ -5,9 +5,6 @@
 #include <chrono>
 #include <algorithm>
 
-const int NUM_OF_ELEMENTS = 1000;
-const double DAMAGE_CONSTANT = 10000.0;
-
 class Ship {
 public:
     virtual void fill() = 0;

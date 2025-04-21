@@ -6,65 +6,54 @@
 #include <iostream>
 #include <string>
 
-
 const int NUM_OF_ELEMENTS = 1000;
 const double DAMAGE_CONSTANT = 10000.0;
+
 
 using namespace std;
 
 class Ship {
-    protected:
-        string name;
-        char orientation;
-        int posx;
-        int posy;
-        int size;
-        int price;
-        int health;
-        int power;
-        char id;  
-    
-    public:
-        Ship(string name, int size, int price, int health, int power, char id)
-            : name(name), size(size), price(price), health(health), power(power), id(id) {}
-        
-        Ship(){}
-    
-        virtual ~Ship() = default;
-    
-        virtual void display() const {
-            // Mostrar información del barco
-            cout << "Ship: " << name << ", Health: " << health << ", Power: " << power << endl;
-        }
-    
-        virtual void takeDamage(int dmg) {
-            health -= dmg;
-            if (health < 0) health = 0;
-        }
+protected:
+    string name;
+    char orientation;
+    int posx;
+    int posy;
+    int size;
+    int price;
+    int health;
+    int power;
+    char id;
 
-        virtual void upgradeShip(){
-            cout << "not implemented!" << endl;
-        }
-         // Métodos getters
-        string getName() const { return name; }
-        char getOrientation() const { return orientation; }
-        int getPosX() const { return posx; }
-        int getPosY() const { return posy; }
-        int getSize() const { return size; }
-        int getPrice() const { return price; }
-        int getHealth() const { return health; }
-        virtual int getPower() { return power; }
-        char getID() const { return id; }
-        bool isDestroyed() const { return health <= 0; }
+public:
+    Ship(string name, int size, int price, int health, int power, char id);
+    Ship();
 
-        // Métodos setters
-        void setName(const string& newName) { name = newName; }
-        void setOrientation(char newOrientation) { orientation = newOrientation; }
-        void setPosX(int newPosX) { posx = newPosX; }
-        void setPosY(int newPosY) { posy = newPosY; }
-        void setSize(int newSize) { size = newSize; }
-        void setPrice(int newPrice) { price = newPrice; }
-        void setHealth(int newHealth) { health = newHealth; }
-        void setPower(int newPower) { power = newPower; }
-        void setID(char newID) { id = newID; }
-    };
+    virtual ~Ship() = default;
+
+    virtual void display() const;
+    virtual void takeDamage(int dmg);
+    virtual void upgradeShip();
+
+    // Métodos getters
+    string getName() const;
+    char getOrientation() const;
+    int getPosX() const;
+    int getPosY() const;
+    int getSize() const;
+    int getPrice() const;
+    int getHealth() const;
+    virtual int getPower();
+    char getID() const;
+    bool isDestroyed() const;
+
+    // Métodos setters
+    void setName(const string& newName);
+    void setOrientation(char newOrientation);
+    void setPosX(int newPosX);
+    void setPosY(int newPosY);
+    void setSize(int newSize);
+    void setPrice(int newPrice);
+    void setHealth(int newHealth);
+    void setPower(int newPower);
+    void setID(char newID);
+};
