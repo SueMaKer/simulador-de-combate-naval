@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 
 class Set {
@@ -12,18 +13,15 @@ private:
 
     Node* root;
 
-    // Helper for insert
     Node* insert(Node* node, int value) {
         if (!node) return new Node(value);
         if (value < node->value)
             node->left = insert(node->left, value);
         else if (value > node->value)
             node->right = insert(node->right, value);
-        // If equal, do nothing (set stores unique values)
         return node;
     }
 
-    // Helper for search
     bool search(Node* node, int value) const {
         if (!node) return false;
         if (value == node->value) return true;
@@ -33,14 +31,12 @@ private:
             return search(node->right, value);
     }
 
-    // Helper for find minimum value node
     Node* findMin(Node* node) {
         while (node && node->left)
             node = node->left;
         return node;
     }
 
-    // Helper for remove
     Node* remove(Node* node, int value) {
         if (!node) return nullptr;
         if (value < node->value) {
@@ -48,7 +44,6 @@ private:
         } else if (value > node->value) {
             node->right = remove(node->right, value);
         } else {
-            // Node found
             if (!node->left && !node->right) {
                 delete node;
                 return nullptr;
@@ -61,7 +56,6 @@ private:
                 delete node;
                 return temp;
             } else {
-                // Two children: get inorder successor
                 Node* temp = findMin(node->right);
                 node->value = temp->value;
                 node->right = remove(node->right, temp->value);
@@ -70,7 +64,6 @@ private:
         return node;
     }
 
-    // Helper for in-order display
     void display(Node* node) const {
         if (!node) return;
         display(node->left);
@@ -78,7 +71,6 @@ private:
         display(node->right);
     }
 
-    // Helper to deallocate memory
     void clear(Node* node) {
         if (!node) return;
         clear(node->left);
@@ -86,12 +78,28 @@ private:
         delete node;
     }
 
+    int getSize(Node* node) const {
+        if (!node) return 0;
+        return 1 + getSize(node->left) + getSize(node->right);
+    }
+
+    bool getElementAt(Node* node, int& counter, int index, int& result) const {
+        if (!node) return false;
+
+        if (getElementAt(node->left, counter, index, result)) return true;
+
+        if (counter == index) {
+            result = node->value;
+            return true;
+        }
+        counter++;
+
+        return getElementAt(node->right, counter, index, result);
+    }
+
 public:
     Set() : root(nullptr) {}
-
-    ~Set() {
-        clear(root);
-    }
+    ~Set() { clear(root); }
 
     void insert(int value) {
         if (!search(value)) {
@@ -119,5 +127,22 @@ public:
         std::cout << "Set contents: ";
         display(root);
         std::cout << "\n";
+    }
+
+    int getSize() const {
+        return getSize(root);
+    }
+
+    int getElement(int index) const {
+        int size = getSize();
+        if (index < 0 || index >= size) {
+            std::cerr << "Index out of bounds\n";
+            return -1; // o lanza una excepción si preferís
+        }
+
+        int counter = 0;
+        int result = -1;
+        getElementAt(root, counter, index, result);
+        return result;
     }
 };

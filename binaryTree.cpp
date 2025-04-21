@@ -1,134 +1,103 @@
-#include <iostream>
-#include <vector>
-#include <chrono>
-#include <algorithm>
+#include "BinaryTree.hpp"
 
 using namespace std;
 using namespace std::chrono;
 
-// Clase análoga a BTreeNode, pero para búsqueda binaria sobre array ordenado
-class BinarySearchNode {
-public:
-    vector<int> data;
+// --- BTNode constructor ---
+BinaryTree::BTNode::BTNode(int val) : key(val), left(nullptr), right(nullptr) {}
 
-    void insert(int key);
-    bool remove(int key);
-    int binarySearch(int key, int& iterations);
-    void traverse();
-};
-
-// Clase análoga a BTree, que interactúa con el "nodo" de array
-class BinarySearchArray {
-public:
-    BinarySearchNode* root;
-
-    BinarySearchArray() {
-        root = new BinarySearchNode();
-    }
-
-    void insert(int key) {
-        root->insert(key);
-    }
-
-    bool remove(int key) {
-        return root->remove(key);
-    }
-
-    void traverse() {
-        root->traverse();
-    }
-
-    int search(int key, int& iterations) {
-        return root->binarySearch(key, iterations);
-    }
-};
-
-// Implementaciones
-
-void BinarySearchNode::insert(int key) {
-    auto pos = lower_bound(data.begin(), data.end(), key);
-    data.insert(pos, key);
+// --- Constructor ---
+BinaryTree::BinaryTree()
+    : Ship("BinaryTree", 4, 150, 100, 500, 'B'),
+      root(nullptr),
+      lastIterations(0),
+      lastSearchTime(0),
+      foundLastValue(false) {
+    setSet();
+    populateTree();
 }
 
-bool BinarySearchNode::remove(int key) {
-    auto pos = lower_bound(data.begin(), data.end(), key);
-    if (pos != data.end() && *pos == key) {
-        data.erase(pos);
-        return true;
+// --- Destructor ---
+BinaryTree::~BinaryTree() {
+    deleteTree(root);
+}
+
+// --- Populate Set with Random Values ---
+void BinaryTree::setSet() {
+    srand(static_cast<unsigned int>(time(nullptr)));
+    for (int i = 0; i < NUM_OF_ELEMENTS; ++i) {
+        int val = (rand() % (NUM_OF_ELEMENTS * 5)) + 1;
+        set.insert(val);
     }
-    return false;
 }
 
-int BinarySearchNode::binarySearch(int key, int& iterations) {
-    int left = 0;
-    int right = static_cast<int>(data.size()) - 1;
-    iterations = 0;
-
-    while (left <= right) {
-        iterations++;
-        int mid = left + (right - left) / 2;
-
-        if (data[mid] == key)
-            return mid;
-        else if (data[mid] < key)
-            left = mid + 1;
-        else
-            right = mid - 1;
+// --- Insert all elements into the tree ---
+void BinaryTree::populateTree() {
+    for (int i = 0; i < set.getSize(); ++i) {
+        insert(set.getElement(i));
     }
-
-    return -1;
 }
 
-void BinarySearchNode::traverse() {
-    for (int val : data)
-        cout << val << " ";
-    cout << endl;
+// --- Delete entire tree ---
+void BinaryTree::deleteTree(BTNode* node) {
+    if (!node) return;
+    deleteTree(node->left);
+    deleteTree(node->right);
+    delete node;
 }
 
-// Función con métricas de búsqueda
-int searchWithMetrics(BinarySearchArray& arr, int key) {
-    int iterations = 0;
+// --- Insert wrapper ---
+void BinaryTree::insert(int key) {
+    root = insertRec(root, key);
+}
+
+// --- Insert recursive ---
+BinaryTree::BTNode* BinaryTree::insertRec(BTNode* node, int key) {
+    if (!node) return new BTNode(key);
+    if (key < node->key)
+        node->left = insertRec(node->left, key);
+    else if (key > node->key)
+        node->right = insertRec(node->right, key);
+    return node;
+}
+
+// --- Search with iteration count and timing ---
+int BinaryTree::search(int key) {
+    lastIterations = 0;
+    foundLastValue = false;
+
     auto start = high_resolution_clock::now();
-    int index = arr.search(key, iterations);
-    auto end = high_resolution_clock::now();
+    BTNode* current = root;
 
-    auto duration = duration_cast<nanoseconds>(end - start).count();
-
-    if (index != -1)
-        cout << key << " encontrado en el índice " << index;
-    else
-        cout << key << " no encontrado";
-
-    cout << " tras " << iterations << " iteraciones.\n";
-    cout << "Tiempo de búsqueda: " << duration << " nanosegundos.\n";
-
-    return iterations;
-}
-
-// Main para probar
-/* int main() {
-    BinarySearchArray arr;
-    for (int i = 0; i < 10; i++) {
-        arr.insert(i * 2);  // Insertar pares: 0, 2, 4, ..., 18
+    while (current != nullptr) {
+        ++lastIterations;
+        if (key == current->key) {
+            foundLastValue = true;
+            break;
+        } else if (key < current->key)
+            current = current->left;
+        else
+            current = current->right;
     }
 
-    cout << "Contenido del array: ";
-    arr.traverse();
+    auto stop = high_resolution_clock::now();
+    lastSearchTime = duration<double, std::milli>(stop - start).count();
 
-    searchWithMetrics(arr, 8);
-    cout << endl;
-
-    searchWithMetrics(arr, 9);
-    cout << endl;
-
-    arr.insert(9);
-    cout << "Después de insertar 9: ";
-    arr.traverse();
-
-    arr.remove(4);
-    cout << "Después de eliminar 4: ";
-    arr.traverse();
-
-    return 0;
+    return lastIterations;
 }
- */
+
+// --- getPower based on search ---
+int BinaryTree::getPower() {
+    srand(static_cast<unsigned int>(time(nullptr)));
+    int target = (rand() % (NUM_OF_ELEMENTS * 5)) + 1;
+    int iterations = search(target);
+    return iterations > 0 ? DAMAGE_CONSTANT / iterations : 0;
+}
+
+// --- Display search and damage info ---
+void BinaryTree::printReport() {
+    cout << "[Search Result] Value was " << (foundLastValue ? "found." : "not found.") << "\n";
+    cout << "[Damage] " << getPower() << "\n";
+    cout << "Last search time (ms): " << lastSearchTime << "\n";
+    cout << "Last iterations: " << lastIterations << "\n";
+}

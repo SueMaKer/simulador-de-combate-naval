@@ -11,33 +11,25 @@ private:
     Board board;
 
 public:
-    Player(const std::string& name) : name(name), money(1000), health(100), actionPoints(3) {}
+    Player(const std::string& name);
 
-    std::string getName() const { return name; }
-    int getMoney() const { return money; }
-    int getHealth() const { return health; }
-    int getPoints() const { return actionPoints; }
+    std::string getName() const;
+    int getMoney() const;
+    int getHealth() const;
+    int getPoints() const;
 
-    Board& getBoard() { return board; }
-    const Fleet& getFleet() const { return board.getConstFleet(); }
-    Fleet& getFleet(int rand) {return board.getFleet();} //rand para usar la no constante
+    Board& getBoard();
+    const Fleet& getFleet() const;
+    Fleet& getFleet(int rand); // rand para usar la no constante
 
-    bool isAlive() const { return health > 0; }
-    bool canAfford(int amount) const { return money >= amount; }
+    bool isAlive() const;
+    bool canAfford(int amount) const;
 
-    void addShip(Ship* ship) { board.getFleet().addShip(ship); }
+    void addShip(Ship* ship);
 
-    bool spendMoney(int amount) {
-        if (!canAfford(amount)) return false;
-        money -= amount;
-        return true;
-    }
-
-    void addMoney(int currency) {
-        money += currency;
-    }
-
-    void setHealth(int newHealth) { health = newHealth; }
-    void resetPoints() { actionPoints = 3; }
-    void decreasePoints() { if (actionPoints > 0) --actionPoints; }
+    bool spendMoney(int amount);
+    void addMoney(int currency);
+    void setHealth(int newHealth);
+    void resetPoints();
+    void decreasePoints();
 };

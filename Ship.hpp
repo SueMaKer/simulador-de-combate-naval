@@ -1,6 +1,15 @@
 #pragma once
+#include <cstdlib>
+#include <ctime>
+#include <chrono>
+#include "Set.hpp"
 #include <iostream>
 #include <string>
+
+
+const int NUM_OF_ELEMENTS = 1000;
+const double DAMAGE_CONSTANT = 10000.0;
+
 using namespace std;
 
 class Ship {

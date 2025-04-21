@@ -1,11 +1,7 @@
 #pragma once 
-#include <iostream>
-#include <chrono>
+
 #include <random>
 #include "Ship.hpp"
-
- int NUM_OF_ELEMENTS = 1000; // Number of elements in the list
- int DAMAGE_CONSTANT = 800;
 
 class Node {
 public:
@@ -100,4 +96,5 @@ public: //Initializes the list and immediately fills it with random values.
         std::cout << "Last search time (ms): " << lastSearchTime << "\n";
         std::cout << "Last iterations: " << lastIterations << "\n";
     }
+
 };

@@ -1,9 +1,10 @@
-/*
+
 #pragma once
 #include <iostream>
 #include <chrono>
 #include <random>
 #include "Ship.hpp"
+#include "Set.hpp"
 using namespace std;
 using namespace std::chrono;
 
@@ -35,25 +36,30 @@ private:
     double lastSearchTime;
     int lastIterations;
     bool foundLastValue;
+    Set set;
 
 public:
     BTree(int t = 3) 
         : Ship("BTree", 5, 200, 120, 700, 'T'), root(nullptr), t(t), lastSearchTime(0), lastIterations(0), foundLastValue(false) {
+        setSet();
         populateTree();
     }
 
     ~BTree() {
-        // Nota: Se podría implementar una función recursiva para liberar memoria
-        // pero se omite aquí porque el foco es conectar con Ship
+    
+    }
+    void setSet() {
+        srand(static_cast<unsigned int>(time(nullptr))); 
+    
+        for (int i = 0; i < NUM_OF_ELEMENTS; ++i) {
+            int val = (rand() % (NUM_OF_ELEMENTS * 5)) + 1;  
+            set.insert(val);
+        }
     }
 
     void populateTree() {
-        std::mt19937 rng(std::random_device{}());
-        std::uniform_int_distribution<int> dist(1, NUM_OF_ELEMENTS * 5);
-
-        for (int i = 0; i < NUM_OF_ELEMENTS; ++i) {
-            int val = dist(rng);
-            insert(val);
+        for (int index; index < set.getSize(); ++index) {  
+            insert(set.getElement(index));
         }
     }
 
@@ -61,7 +67,8 @@ public:
     void search(int k);
     
     int getPower() override {
-        search(23);
+        srand(static_cast<unsigned int>(time(nullptr)));
+        search((rand() % (NUM_OF_ELEMENTS * 5)) + 1);
         return lastIterations > 0 ? DAMAGE_CONSTANT / lastIterations : 0.0;
     }
 
@@ -177,4 +184,3 @@ void BTree::search(int k) {
     lastSearchTime = duration<double, std::milli>(stop - start).count();
     foundLastValue = (result != nullptr);
 }
-*/

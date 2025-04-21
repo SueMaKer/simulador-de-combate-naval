@@ -1,50 +1,27 @@
 #pragma once
 #include "Ship.hpp"
 #include <vector>
+#include <iostream>
 
 class Fleet {
-    vector<Ship*> ships;
+private:
+    std::vector<Ship*> ships;
     int size = 0;
+
 public:
-    void addShip(Ship* ship) {
-        ++size;
-        ships.push_back(ship);
-    }
+    void addShip(Ship* ship);
 
-    Ship* findShip(const string& name) {
-        for (auto s : ships) {
-            if (s->getName() == name)
-                return s;
-        }
-        return nullptr;
-    }
+    Ship* findShip(const std::string& name);
 
-    void displayFleet() const {
-        for (int i = 0; i < size; ++i) {
-            std::cout << i+1 << ": ";
-            ships[i]->display();
-        }
-    }
-    int getSize() const {
-        return size;
-    }
-    const int getShipPower(int index){
-        return ships[index]->getPower();
-    }
+    void displayFleet() const;
 
-    void upgradeShip(int index){
-        ships[index]->upgradeShip();
-    } 
+    int getSize() const;
 
-    vector<Ship *> getShips(){
-        return ships;
-    }
+    int getShipPower(int index);
 
-    void clearShips() {
-        for (Ship* ship : ships) {
-            delete ship;
-        }
-        ships.clear();
-        size = 0;
-    }
+    void upgradeShip(int index);
+
+    std::vector<Ship*> getShips();
+
+    void clearShips();
 };
